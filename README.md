@@ -8,7 +8,7 @@ This API allows to create RSS feeds. Users can follow different feeds. All feeds
 * [Goose](https://github.com/pressly/goose/)
 * PostgreSQL
 ### Installation Guide
-* Clone this repository [here]()
+* Clone this repository [here](https://github.com/Taras-Rm/rss-agg)
 * The develop branch is - `dev`
 * Run npm install to install all dependencies
 * Create an .env file localy. See .env.example for assistance.
