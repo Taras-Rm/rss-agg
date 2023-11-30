@@ -14,6 +14,7 @@ func startScriping(queries *database.Queries, cuncurrency int, interval time.Dur
 	log.Printf("Start scriping cuncurrency %v, with interval %v", cuncurrency, interval)
 
 	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
 
 	for ; ; <-ticker.C {
 		log.Println("Start scripe feed")
@@ -28,7 +29,6 @@ func startScriping(queries *database.Queries, cuncurrency int, interval time.Dur
 			wg.Add(1)
 			go scrapeFeed(queries, wg, feed)
 		}
-
 		wg.Wait()
 	}
 }
