@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/Taras-Rm/rss-agg/internal/database"
 	"github.com/go-chi/chi"
@@ -20,12 +21,6 @@ type apiConfig struct {
 }
 
 func main() {
-	res, err := urlToFeed("https://www.wagslane.dev/index.xml")
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(res)
-
 	godotenv.Load(".env")
 
 	portStr := os.Getenv("PORT")
@@ -43,9 +38,12 @@ func main() {
 		log.Fatal("Can not connect to database")
 	}
 
+	db := database.New(conn)
 	apiCfg := apiConfig{
-		DB: database.New(conn),
+		DB: db,
 	}
+
+	go startScriping(db, 10, time.Minute)
 
 	router := chi.NewRouter()
 
