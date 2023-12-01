@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"sync"
 	"time"
 
 	"github.com/Taras-Rm/rss-agg/internal/database"
+	"github.com/google/uuid"
 )
 
 func startScriping(queries *database.Queries, cuncurrency int, interval time.Duration) {
@@ -49,7 +51,32 @@ func scrapeFeed(queries *database.Queries, wg *sync.WaitGroup, feed database.Fee
 	}
 
 	for _, item := range rssFeeds.Chanel.Item {
-		log.Printf("Found post: %v", item.Title)
+		description := sql.NullString{}
+		if item.Description != "" {
+			description.String = item.Description
+			description.Valid = true
+		}
+
+		pubAt, err := time.Parse(time.RFC1123Z, item.PubDate)
+		if err != nil {
+			fmt.Printf("Failed parse time %v with error %v", item.PubDate, err)
+			continue
+		}
+
+		_, err = queries.CreatePost(context.Background(), database.CreatePostParams{
+			ID:          uuid.New(),
+			CreatedAt:   time.Now().UTC(),
+			UpdatedAt:   time.Now().UTC(),
+			Title:       item.Title,
+			Description: description,
+			Url:         item.Link,
+			PublishedAt: pubAt,
+			FeedID:      feed.ID,
+		})
+		if err != nil {
+			fmt.Printf("Failed create post %v with error %v", item.Title, err)
+			return
+		}
 	}
 	log.Printf("Feed %v collected, posts %v found", rssFeeds.Chanel.Title, len(rssFeeds.Chanel.Item))
 }
