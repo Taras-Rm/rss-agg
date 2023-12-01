@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 	"sync"
 	"time"
 
@@ -74,6 +75,9 @@ func scrapeFeed(queries *database.Queries, wg *sync.WaitGroup, feed database.Fee
 			FeedID:      feed.ID,
 		})
 		if err != nil {
+			if strings.Contains(err.Error(), "duplicate key value") {
+				continue
+			}
 			fmt.Printf("Failed create post %v with error %v", item.Title, err)
 			return
 		}
