@@ -14,6 +14,8 @@ This API allows to create RSS feeds. Users can follow different feeds. All feeds
 * Create an .env file localy. See .env.example for assistance.
 ### Usage
 * Run `go build && ./rss-agg` to start the application.
+### Migration
+* For running migrations, go to sql/schema and execute `goose postgres postgres://{user}:{password}@{host}:{port}/{dbname} up`
 ### API Endpoints
 | HTTP Verbs | Endpoints | Action |
 | --- | --- | --- |
