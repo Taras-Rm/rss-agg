@@ -1,6 +1,6 @@
-# RSS Agregator API
+# RSS Posts Agregator API
 ### Introduction
-This API allows to create RSS feeds. Users can follow different feeds. All feeds posts are fetched and updated in database with some time interval.
+This API allows to create RSS feeds. Users can follow different feeds. All feeds posts are fetched and updated in the database with some time interval. Users can get the newest posts according to their feeds.
 ### Technologies Used
 * [Go](https://go.dev/)
 * [Chi](https://github.com/go-chi/chi/)
@@ -24,5 +24,6 @@ This API allows to create RSS feeds. Users can follow different feeds. All feeds
 | POST | /v1/feed_follows | To follow a feed |
 | GET | /v1/feed_follows | To retrieve all followed feeds |
 | DELETE | /v1/feed_follows/:feed_follow_id | To delete feed follow |
+| GET | /v1/posts | To retrieve the newest posts for users |
 | GET | /v1/healthz | To check api health |
 | GET | /v1/err | To check error respons |
